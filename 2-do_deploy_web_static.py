@@ -2,8 +2,8 @@
 """ A Fabric script that generates a .tgz archive. """
 
 
-from fabric.api import local, put, run, path
-from os.path import exists, join
+from fabric.api import local, put, run, env
+from os.path import exists, join, isfile
 from datetime import datetime
 
 
@@ -34,18 +34,18 @@ def do_pack():
         return None
 
 
-def do_deploy(archive__path):
+def do_deploy(archive_path):
     """Distributes an archive to the web servers and deploys it."""
 
-    if not path.isfile(archive__path):
+    if not isfile(archive_path):
         return False
 
     try:
         # Extract name without extension from the archive path
-        archive_name = archive__path.split('/')[-1][:-4]
+        archive_name = archive_path.split('/')[-1][:-4]
 
         # Upload the archive to /tmp/ directory on the web server
-        put(archive__path, '/tmp')
+        put(archive_path, '/tmp')
 
         # Create necessary folders and extract the archive
         run('sudo mkdir -p /data/web_static/releases/{}/'.format(archive_name))
