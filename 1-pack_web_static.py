@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 """ A Fabric script that generates a .tgz archive. """
 
-from fabric.api import local
+
+from fabric.api import *
 from os.path import exists, join
 from datetime import datetime
 
 
-def create_tar_archive():
+def do_pack():
     """Generates a .tgz archive from the contents of the web_static folder."""
 
     # Check if the 'versions' folder exists; create it if not
