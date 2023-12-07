@@ -5,6 +5,7 @@ from fabric.api import local
 from os.path import exists, join
 from datetime import datetime
 
+
 def create_tar_archive():
     """Generates a .tgz archive from the contents of the web_static folder."""
 
@@ -15,7 +16,8 @@ def create_tar_archive():
     # Generate the timestamp for the archive name
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
 
-    # Define the archive path using os.path.join for better cross-platform compatibility
+    # Define the archive path using os.path.join
+    # for better cross-platform compatibility
     archive_path = join("versions", "web_static_{}.tgz".format(timestamp))
 
     # Create the tar archive
@@ -26,4 +28,3 @@ def create_tar_archive():
         return archive_path
     else:
         return None
-
