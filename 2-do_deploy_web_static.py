@@ -11,30 +11,6 @@ env.hosts = ['54.237.94.18', '100.26.154.55']
 env.user = 'ubuntu'
 
 
-def do_pack():
-    """Generates a .tgz archive from the contents of the web_static folder."""
-
-    # Check if the 'versions' folder exists; create it if not
-    if not exists("versions"):
-        local("mkdir versions")
-
-    # Generate the timestamp for the archive name
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-
-    # Define the archive path using os.path.join
-    # for better cross-platform compatibility
-    archive_path = join("versions", "web_static_{}.tgz".format(timestamp))
-
-    # Create the tar archive
-    local('tar cvfz "{}" .'.format(archive_path))
-
-    # Check if the archive has been correctly generated
-    if exists(archive_path):
-        return archive_path
-    else:
-        return None
-
-
 def do_deploy(archive_path):
     """Distributes an archive to the web servers and deploys it."""
 
