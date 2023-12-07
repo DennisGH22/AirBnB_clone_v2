@@ -37,37 +37,32 @@ def do_pack():
 def do_deploy(archive_path):
     """Distributes an archive to the web servers and deploys it."""
 
-    # Check if the archive file exists
-    if not exists(archive_path):
+    if not path.isfile(archive_path):
         return False
 
     try:
-        # Upload the archive to /tmp/ directory on the web server
-        put(archive_path, '/tmp/')
+        # Extract name without extension from the archive path
+        archive_name = archive_path.split('/')[-1][:-4]
 
-        # Extract the archive to /data/web_static/releases/ folder
-        archive_filename = archive_path.split('/')[-1]
-        archive_folder = '/data/web_static/releases/{}'.format(
-            archive_filename.split('.')[0]
-        )
-        run('mkdir -p {}'.format(archive_folder))
-        run('tar -xzf /tmp/{} -C {}'.format(archive_filename, archive_folder))
+        # Upload the archive to /tmp/ directory on the web server
+        put(archive_path, '/tmp')
+
+        # Create necessary folders and extract the archive
+        run('sudo mkdir -p /data/web_static/releases/{}/'.format(archive_name))
+        run('tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/'.format(archive_name, archive_name))
 
         # Remove the uploaded archive from the web server
-        run('rm /tmp/{}'.format(archive_filename))
+        run('rm /tmp/{}.tgz'.format(archive_name))
 
-        # Move the contents of the extracted archive to the web_static folder
-        run('mv {}/web_static/* {}'.format(archive_folder, archive_folder))
-
-        # Remove the old symbolic link
+        # Move contents and update symbolic link
+        run('mv /data/web_static/releases/{}/web_static/* /data/web_static/releases/{}/'.format(archive_name, archive_name))
+        run('rm -rf /data/web_static/releases/{}/web_static'.format(archive_name))
         run('rm -rf /data/web_static/current')
+        run('ln -s /data/web_static/releases/{}/ /data/web_static/current'.format(archive_name))
 
-        # Create a new symbolic link
-        run('ln -s {} /data/web_static/current'.format(archive_folder))
-
-        print('New version deployed!')
+        print("New version deployed!")
         return True
 
     except Exception as e:
-        print('Deployment failed:', str(e))
+        print("Deployment failed:", str(e))
         return False
