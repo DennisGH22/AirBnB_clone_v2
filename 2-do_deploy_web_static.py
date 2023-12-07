@@ -42,16 +42,15 @@ def do_deploy(archive_path):
         return False
 
     try:
-        # Upload the archive to /tmp/ directory on the web server
-        put(archive_path, '/tmp')
-
         # Extract name without extension from the archive path
         archive_name = archive_path.split('/')[-1][:-4]
 
+        # Upload the archive to /tmp/ directory on the web server
+        put(archive_path, '/tmp')
+
         # Create necessary folders and extract the archive
         run('sudo mkdir -p /data/web_static/releases/{}/'.format(archive_name))
-        run('tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/'.format(
-            archive_name, archive_name))
+        run('tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/'.format(archive_name, archive_name))
 
         # Remove the uploaded archive from the web server
         run('rm /tmp/{}.tgz'.format(archive_name))
