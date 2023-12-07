@@ -26,16 +26,20 @@ def do_deploy(archive_path):
 
         # Create necessary folders and extract the archive
         run('sudo mkdir -p /data/web_static/releases/{}/'.format(archive_name))
-        run('tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/'.format(archive__name, archive_name))
+        run('tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/'.format(
+            archive__name, archive_name))
 
         # Remove the uploaded archive from the web server
         run('rm /tmp/{}.tgz'.format(archive__name))
 
         # Move contents and update symbolic link
-        run('mv /data/web_static/releases/{}/web_static/* /data/web_static/releases/{}/'.format(archive_name, archive_name))
-        run('rm -rf /data/web_static/releases/{}/web_static'.format(archive_name))
+        run('mv /data/web_static/releases/{}/web_static/* \
+            /data/web_static/releases/{}/'.format(archive_name, archive_name))
+        run('rm -rf /data/web_static/releases/{}/web_static'.format(
+            archive_name))
         run('rm -rf /data/web_static/current')
-        run('ln -s /data/web_static/releases/{}/ /data/web_static/current'.format(archive_name))
+        run('ln -s /data/web_static/releases/{}/ \
+            /data/web_static/current'.format(archive_name))
 
         print("New version deployed!")
         return True
