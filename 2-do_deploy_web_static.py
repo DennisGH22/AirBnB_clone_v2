@@ -8,6 +8,7 @@ from datetime import datetime
 
 
 env.hosts = ['54.237.94.18', '100.26.154.55']
+env.user = 'ubuntu'
 
 
 def do_pack():
@@ -63,5 +64,6 @@ def do_deploy(archive_path):
 
         print("New version deployed!")
         return True
+
     except:
         return False
