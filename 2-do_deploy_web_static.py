@@ -2,7 +2,7 @@
 """ A Fabric script that generates a .tgz archive. """
 
 
-from fabric.api import local, put, run, env, path
+from fabric.api import local, put, run, env
 from os.path import exists, join, isfile
 from datetime import datetime
 
@@ -38,7 +38,7 @@ def do_pack():
 def do_deploy(archive_path):
     """Distributes an archive to the web servers and deploys it."""
 
-    if not path.isfile(archive_path):
+    if not isfile(archive_path):
         return False
 
     try:
