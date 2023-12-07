@@ -63,6 +63,5 @@ def do_deploy(archive__path):
         print("New version deployed!")
         return True
 
-    except Exception as e:
-        print("Deployment failed:", str(e))
+    except:
         return False
